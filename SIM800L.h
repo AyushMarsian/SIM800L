@@ -35,6 +35,7 @@ class SIM800L
 
  	//Methods for sms 
 	bool sendSMS(char* number,char* text);
+	String readSMS(uint8_t msgIndex);
 
 	
 	//Methods for network

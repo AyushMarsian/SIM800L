@@ -166,6 +166,29 @@ bool SIM800L::sendSMS(char* number,char* text)
 	return false;
 }
 
+String SIM800L::readSMS(uint8_t msgIndex)
+{
+	_serial->print (F("AT+CMGF=1\r")); //set sms to text mode  
+	_serialBuffer=_readSerial(); 
+	if ((_serialBuffer.indexOf("ERR"))!=-1) // CHECK IF ERROR
+	{
+		_serial->print (F("AT+CMGR="));
+		_serial->print (msgIndex);
+		_serial->print ("\r");
+		_serialBuffer=_readSerial();
+		if (_serialBuffer.indexOf("CMGR:")!=-1)
+		{
+			return _serialBuffer;
+		}
+		else
+		{
+			return ""; 
+		}   
+	}
+
+	return "";
+}
+
 int8_t SIM800L::signalStrength()
 {
 	if(checkNetwork())

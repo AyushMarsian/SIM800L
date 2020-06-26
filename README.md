@@ -23,24 +23,24 @@ GND | GND |
 
 ## Methods and functions
 
-Name|Return|Notes
-:-------|:-------:|:-----------------------------------------------:|
-begin(SerialPort)|true or false|Initialize the library, Insert SIM card compulsorily 
+Name   |Return |  Notes
+-------|-------|-----------------------------------------------|
+begin(SerialPort)        |true or false|Initialize the library, Insert SIM card compulsorily 
 begin(SerialPort,Rst_pin)|true or false|Initialize the library, Insert SIM card compulsorily. If you define and pass reset pin of your board you can reset GSM by external reset pin of the SIM800l
-dialNumber(number)|true or false| It returns true if ATD passed successfully
-answerCall()|true or false|
-hangoffCall()|true or false|
-callStatus()|int8_t|Return the call status. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing
-sendSMS(number,text)|true or false|parameters must be Strings
-sendSMS(msgIndex)|String|
-signalStrength()|int8_t|Return signal strength, if -1 no network
-checkNetwork()|true or false|
-serviceProvider()|String|Return the name of service provider
-GSMTime(time)|true or false|Will fill up the array you passed. Where time[0]=year,time[1]=Month,time[2]=date,time[3]=hour,time[4]=minute,time[5]=seconds
-enAutoTimeZone()|true or false|You have to enable Auto time zone before you read the time.
-softReset()|true or false|Reset the module by AT commands
-hardReset()|true or false|Reset the module by external reset pin. You must have to pass reset pin during begin
-____________________________________________________________________________________
+dialNumber(number)       |true or false| It returns true if ATD passed successfully
+answerCall()             |true or false|
+hangoffCall()            |true or false|
+callStatus()             |int8_t|Return the call status. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing
+sendSMS(number,text)     |true or false|parameters must be Strings
+sendSMS(msgIndex)        |String|
+signalStrength()         |int8_t|Return signal strength, if -1 no network
+checkNetwork()           |true or false|
+serviceProvider()        |String|Return the name of service provider
+GSMTime(time)            |true or false|Will fill up the array you passed. Where time[0]=year,time[1]=Month,time[2]=date,time[3]=hour,time[4]=minute,time[5]=seconds
+enAutoTimeZone()         |true or false|You have to enable Auto time zone before you read the time.
+softReset()              |true or false|Reset the module by AT commands
+hardReset()              |true or false|Reset the module by external reset pin. You must have to pass reset pin during begin
+
 
 You can regulate the voltage, use +5v which can give higher current.
 

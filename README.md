@@ -49,7 +49,7 @@ You can regulate the voltage, use +5v which can give higher current.
 
 For the **reset pin** you need to use NPN transistor, follow the below circuit.
 
-![alt text](https://github.com/AyushMarsian/SIM800L/blob/master/circuits/Reset_Circuit.jpg "Reset_Circuit")
+![alt text](https://github.com/AyushMarsian/SIM800L/blob/master/circuits/Reset_Circuit.JPG "Reset_Circuit")
 
 ## Credits and license
 

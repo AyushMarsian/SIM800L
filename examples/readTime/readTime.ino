@@ -1,7 +1,7 @@
 /*  Copyright to AyushMarsian(Ankit Ghevariya)
  *  Licence GNU GPL V3
  *  
- *  Example for send custom SMS from GSM SIM800L module
+ *  Example for read network time from GSM SIM800L module
  *  Written by Ankit Ghevariya, public domain
  *  
  *  You have to connect pin as written below

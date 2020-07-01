@@ -16,7 +16,8 @@ answerCall	KEYWORD2
 dialNumber	KEYWORD2
 hangoffCall	KEYWORD2
 callStatus	KEYWORD2
-
+incomingCall	KEYWORD2
+available	KEYWORD2
 
 #######################################
 # Methods for sms (KEYWORD2)
@@ -32,11 +33,11 @@ readSMS	KEYWORD2
 signalStrength	KEYWORD2
 checkNetwork	KEYWORD2
 serviceProvider	KEYWORD2
-GSMTime			KEYWORD2
+GSMTime		KEYWORD2
 enAutoTimeZone	KEYWORD2
 
 #######################################
-# Methods for NPower (KEYWORD2)
+# Methods for Power (KEYWORD2)
 #######################################
 
 softReset	KEYWORD2

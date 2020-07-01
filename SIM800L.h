@@ -32,6 +32,8 @@ class SIM800L
  	bool answerCall(); 
  	bool hangoffCall();
  	int8_t callStatus();
+ 	bool incomingCall();
+ 	bool available();
 
  	//Methods for sms 
 	bool sendSMS(char* number,char* text);

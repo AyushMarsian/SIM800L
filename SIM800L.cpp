@@ -74,6 +74,30 @@ bool SIM800L::begin(Stream &serial,uint8_t pin) // begin Definition with Serial 
 }
 
 ////////////////////////////////////////////////////PUBLIC DEFINITION////////////////////////////////////////////////////
+bool SIM800LGSM::available()
+{
+	if(_serial->available())
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+bool SIM800LGSM::incomingCall()
+{
+	_buffer=_readSerial();
+	if ( (_buffer.indexOf("RING") )!=-1 )
+	{
+		return true;
+	}
+	else 
+	{
+		return false;
+	}
+}
 
 bool SIM800L::dialNumber(char* number)
 {

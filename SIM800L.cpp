@@ -88,8 +88,8 @@ bool SIM800L::available()
 
 bool SIM800L::incomingCall()
 {
-	_buffer=_readSerial();
-	if ( (_buffer.indexOf("RING") )!=-1 )
+	_serialBuffer=_readSerial();
+	if ( (_serialBuffer.indexOf("RING") )!=-1 )
 	{
 		return true;
 	}

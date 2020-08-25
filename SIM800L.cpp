@@ -31,7 +31,7 @@ void SIM800L::_clearSerial()
 
 SIM800L::SIM800L(void)
 {
-  _serialBuffer.reserve(255); //reserve memory to prevent fragmention
+  _serialBuffer.reserve(1500); //reserve memory to prevent fragmention
 }
 
 bool SIM800L::begin(Stream &serial) // begin Definition with Serial port assignment
@@ -73,7 +73,140 @@ bool SIM800L::begin(Stream &serial,uint8_t pin) // begin Definition with Serial 
 	begin(serial);
 }
 
+
 ////////////////////////////////////////////////////PUBLIC DEFINITION////////////////////////////////////////////////////
+/*void SIM800L::tcpCallBack(void (*callback)(const char* _data, const uint16_t len))
+{
+    this->tcp_callback = callback;
+}*/
+
+bool SIM800L::startGPRS()
+{
+	_clearSerial();
+	_serial->print(F("AT+CIPSHUT\r\n"));
+	delay(200);
+	_serial->print(F("AT+CIPMUX=1\r\n"));
+	delay(200);
+	_serial->print(F("AT+CIPQSEND=1\r\n"));
+	delay(200);
+	_serial->print(F("AT+CIPRXGET=1\r\n"));
+	delay(200);
+	_serial->print(F("AT+CSTT=\"\"\r\n"));
+	delay(200);
+	_clearSerial();
+	_serial->println("AT+CIICR");
+	_serialBuffer=_readSerial();
+	if((_serialBuffer.indexOf("OK"))==-1 )
+	{
+		return false;  
+	}
+	_clearSerial();
+	_serial->println("AT+CIFSR;E0");
+	_serialBuffer=_readSerial();
+	if((_serialBuffer.indexOf("ERROR")) != -1 )
+	{
+		return false;  
+	}
+
+	_clearSerial();
+	_serial->println("AT+CDNSCFG=\"8.8.8.8\",\"8.8.4.4\"");
+	_serialBuffer=_readSerial();
+	if((_serialBuffer.indexOf("OK")) == -1 )
+	{
+		return false;  
+	}
+	
+	return true;
+}
+
+void SIM800L::tcpConnect(char* host,uint16_t port)
+{
+	uint32_t tempTime=0;
+	char _tempBuff[50]={0};
+	sprintf(_tempBuff,"AT+CIPSTART=0,\"TCP\",\"%s\",\"%d\"\r\n",host,port);
+	_serial->print(_tempBuff);
+}
+
+bool SIM800L::tcpStatus()
+{
+	_clearSerial();
+	_serial->print(F("AT+CIPSTATUS=0\r\n"));
+	_serialBuffer=_readSerial();
+	if((_serialBuffer.indexOf("+CIPSTATUS:") )!=-1 )
+	{
+		if((_serialBuffer.indexOf("CONNECTED") )!=-1 )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+}
+
+int16_t SIM800L::tcpAvailable()
+{
+	_clearSerial();
+	_serial->print(F("AT+CIPRXGET=4,0\r\n"));
+	_serialBuffer=_readSerial();
+	if((_serialBuffer.indexOf("+CIPRXGET: 4,0,") )!= -1)
+	{
+		return _serialBuffer.substring(_serialBuffer.indexOf("+CIPRXGET: 4,0,")+15,_serialBuffer.indexOf("\r",_serialBuffer.indexOf("+CIPRXGET: 4,0,")+15)).toInt();
+	}
+
+	return -1;
+}
+
+void SIM800L::tcpRead(char* buffer,uint16_t length)
+{
+	char _tempBuff[30]={0};
+	sprintf(_tempBuff,"AT+CIPRXGET=2,0,%d\r\n",length);
+	_clearSerial();
+	_serial->print(_tempBuff);
+	_serialBuffer=_readSerial();
+	if((_serialBuffer.indexOf("+CIPRXGET: 2,0,"))!=-1 )
+	{
+		uint16_t dataindex = _serialBuffer.indexOf('\n',_serialBuffer.indexOf(",",_serialBuffer.indexOf("+CIPRXGET: 2,0,")))+1;
+
+		memset(_tempBuff,'\0',sizeof(_tempBuff));
+		for(uint16_t i=0;i<length;i++)
+		{
+			buffer[i]=_serialBuffer[i+dataindex];
+		}
+	}
+}
+
+void SIM800L::tcpSend(char* buffer)
+{
+	_clearSerial();
+	_serial->print("AT+CIPSEND=0\r\n");
+	delay(500);
+	_serial->print(buffer);
+	_clearSerial();
+	_serial->write (0x1A); // command for send data;
+}
+
+/*void SIM800L::loop()
+{
+	if(available())
+	{
+		_serialBuffer=_readSerial();
+		if((_serialBuffer.indexOf("+IPD,"))!=-1)
+		{
+			uint16_t size = _serialBuffer.substring(_serialBuffer.indexOf("+IPD,")+5,_serialBuffer.indexOf(":")).toInt();
+			uint16_t dataindex = _serialBuffer.indexOf(':',_serialBuffer.indexOf("+IPD,"))+1;
+			char _tempBuff[size+1]={0};
+			for(uint16_t i=0;i<size;i++)
+			{
+				_tempBuff[i]=_serialBuffer[i+dataindex];
+			}
+
+			(*tcp_callback)(_tempBuff, size);
+		}
+	}
+}*/
+
 bool SIM800L::available()
 {
 	if(_serial->available())
@@ -178,12 +311,15 @@ bool SIM800L::sendSMS(char* number,char* text)
 	_serial->write (0x1A); // command for send sms
 
 	tempTime=millis();
-	while(millis()-tempTime <= 60000) // Wait for SMS sent response for 1 minute(Maximum response time of AT+CMGS is 1 min)
+	while(millis()-tempTime <= 20000) // Wait for SMS sent response for 1 minute(Maximum response time of AT+CMGS is 1 min)
 	{
-		_serialBuffer=_readSerial();
-		if (((_serialBuffer.indexOf("+CMGS") ) != -1 ) )
+		if(available())
 		{
-			return true;
+			_serialBuffer=_readSerial();
+			if (((_serialBuffer.indexOf("+CMGS") ) != -1 ) )
+			{
+				return true;
+			}
 		}
 	}
 

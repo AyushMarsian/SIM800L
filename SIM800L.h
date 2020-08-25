@@ -20,6 +20,9 @@ class SIM800L
 	String _serialBuffer="";
 	uint8_t rstpin=0; 			//GSM HARD RESET PIN
 	bool rstDeclair=0; 		// CONFIG BIT
+	//void (*tcp_callback)(const char* _data, const uint16_t len) = NULL;
+	//char* apn,user,password;
+
 	String _readSerial();
 	void _clearSerial();
   public:
@@ -50,6 +53,16 @@ class SIM800L
 	//Methods for power
 	bool softReset();
 	bool hardReset();
+
+	//Methonds for TCP
+	//void loop();
+	//void tcpCallBack(void (*callback)(const char* _data, const uint16_t len));
+	bool startGPRS();
+	void tcpConnect(char* host,uint16_t port);
+	bool tcpStatus();
+	int16_t tcpAvailable();
+	void tcpRead(char* buffer,uint16_t length);
+	void tcpSend(char* buffer);
 };
 
 #endif 

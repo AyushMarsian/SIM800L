@@ -37,6 +37,17 @@ GSMTime		KEYWORD2
 enAutoTimeZone	KEYWORD2
 
 #######################################
+# Methods for TCP (KEYWORD2)
+#######################################
+
+startGPRS	KEYWORD2
+tcpConnect	KEYWORD2
+tcpStatus	KEYWORD2
+tcpAvailable	KEYWORD2
+tcpRead	KEYWORD2
+tcpSend	KEYWORD2
+
+#######################################
 # Methods for Power (KEYWORD2)
 #######################################
 

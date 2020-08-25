@@ -40,6 +40,12 @@ GSMTime(time)            |true or false|Will fill up the array you passed. Where
 enAutoTimeZone()         |true or false|You have to enable Auto time zone before you read the time.
 softReset()              |true or false|Reset the module by AT commands
 hardReset()              |true or false|Reset the module by external reset pin. You must have to pass reset pin during begin
+startGPRS()              |true or false|Start internet of GSM
+tcpConnect(hostname,port)|void|This will try to connect with given TCP server parameter
+tcpStatus()				 |true or false|Return TCP connection status
+tcpAvailable()           |uint16_t|Return available data count in TCP buffer
+tcpRead(buffer,length)	 |void|Fill the buffer which you passed upto given length
+tcpSend(buffer)			 |void|Send the buffer to the TCP server
 
 
 You can regulate the voltage, use +5v which can give higher current.

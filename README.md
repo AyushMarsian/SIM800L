@@ -63,3 +63,6 @@ For the **Reset circuit** you need to use NPN transistor, follow the below circu
 - This library is modified from original ([Sim800l](https://github.com/cristiansteib/Sim800l))
 - Copyright (c) 2020 Ankit Ghevariya (https://github.com/ayushmarsian)
 - Licensed under GPL-3.0 ([text](LICENSE))
+
+Encourage us by donating a penny
+[![Donate](https://img.shields.io/badge/Donate-Paypal-blue.svg)](https://www.paypal.com/paypalme/Ayushmarsian)

@@ -12,7 +12,7 @@ OR
 Place the SIM800L library folder into your \Documents\Arduino\libraries folder. 
 You may need to create the libraries subfolder if its your first library. Restart the IDE.
 
-##Encoragement
+## Encoragement
 
 Encourage us by donating a penny
 

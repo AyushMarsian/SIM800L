@@ -12,6 +12,12 @@ OR
 Place the SIM800L library folder into your \Documents\Arduino\libraries folder. 
 You may need to create the libraries subfolder if its your first library. Restart the IDE.
 
+##Encoragement
+
+Encourage us by donating a penny
+
+[![Donate](https://img.shields.io/badge/Donate-Paypal-blue.svg)](https://www.paypal.com/paypalme/Ayushmarsian)
+
 ## Connections & pinouts
 Arduino UNO   |   SIM800L   |    Notes  
 -------------|-------------|------------
@@ -63,6 +69,3 @@ For the **Reset circuit** you need to use NPN transistor, follow the below circu
 - This library is modified from original ([Sim800l](https://github.com/cristiansteib/Sim800l))
 - Copyright (c) 2020 Ankit Ghevariya (https://github.com/ayushmarsian)
 - Licensed under GPL-3.0 ([text](LICENSE))
-
-Encourage us by donating a penny
-[![Donate](https://img.shields.io/badge/Donate-Paypal-blue.svg)](https://www.paypal.com/paypalme/Ayushmarsian)

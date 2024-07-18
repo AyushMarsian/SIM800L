@@ -37,6 +37,7 @@ dialNumber(number)       |true or false| It returns true if ATD passed successfu
 incomingCall()           |String| Returns caller phone number if available
 answerCall()             |true or false|
 hangoffCall()            |true or false|
+forwardCall()            |true or false| Forward call to given phone number
 callStatus()             |int8_t|Return the call status. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing
 sendSMS(number,text)     |true or false|parameters must be Strings
 sendSMS(msgIndex)        |String|

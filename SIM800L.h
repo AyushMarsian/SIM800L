@@ -33,6 +33,7 @@ public:
 	bool dialNumber(char *number);
 	bool answerCall();
 	bool hangoffCall();
+	bool forwardCall(String phoneNumber);
 	int8_t callStatus();
 	String incomingCall();
 	bool available();

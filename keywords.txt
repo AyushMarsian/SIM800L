@@ -15,6 +15,7 @@ SIM800L	KEYWORD1
 answerCall	KEYWORD2
 dialNumber	KEYWORD2
 hangoffCall	KEYWORD2
+forwardCall KEYWORD2
 callStatus	KEYWORD2
 incomingCall	KEYWORD2
 available	KEYWORD2

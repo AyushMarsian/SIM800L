@@ -284,6 +284,20 @@ bool SIM800L::hangoffCall()
 	}
 }
 
+bool SIM800L::forwardCall(String phoneNumber)
+{
+	_clearSerial();
+	_serial->print(F(String("AT+CCFC=1,3,") + "\"" + phoneNumber + String("\",145,1,1\r\n")));
+	if ((_serialBuffer.indexOf("OK")) != -1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 int8_t SIM800L::callStatus()
 {
 	_clearSerial();

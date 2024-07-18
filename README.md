@@ -34,6 +34,7 @@ Name   |Return |  Notes
 begin(SerialPort)        |true or false|Initialize the library, Insert SIM card compulsorily 
 begin(SerialPort,Rst_pin)|true or false|Initialize the library, Insert SIM card compulsorily. If you define and pass reset pin of your board you can reset GSM by external reset pin of the SIM800l
 dialNumber(number)       |true or false| It returns true if ATD passed successfully
+incomingCall()           |String| Returns caller phone number if available
 answerCall()             |true or false|
 hangoffCall()            |true or false|
 callStatus()             |int8_t|Return the call status. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing

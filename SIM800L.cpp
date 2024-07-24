@@ -70,6 +70,8 @@ bool SIM800L::begin(Stream &serial) // begin Definition with Serial port assignm
 	{
 		return false;
 	}
+
+	return false;
 }
 
 bool SIM800L::begin(Stream &serial, uint8_t pin) // begin Definition with Serial port and reset pin assignment
@@ -128,7 +130,6 @@ bool SIM800L::startGPRS()
 
 void SIM800L::tcpConnect(char *host, uint16_t port)
 {
-	uint32_t tempTime = 0;
 	char _tempBuff[50] = {0};
 	sprintf(_tempBuff, "AT+CIPSTART=0,\"TCP\",\"%s\",\"%d\"\r\n", host, port);
 	_serial->print(_tempBuff);
@@ -150,6 +151,7 @@ bool SIM800L::tcpStatus()
 			return false;
 		}
 	}
+	return false;
 }
 
 int16_t SIM800L::tcpAvailable()
@@ -321,6 +323,8 @@ int8_t SIM800L::callStatus()
 	{
 		return -1;
 	}
+
+	return -1;
 }
 
 bool SIM800L::sendSMS(char *number, char *text)
@@ -458,7 +462,8 @@ bool SIM800L::GSMTime(uint8_t *_time)
 	}
 	else
 	{
-		memset(_time, 0xFF, sizeof(_time));
+		memset(_time, 0xFF, sizeof(_time) * sizeof(_time[0]));
+		// memset(_time, 0xFF, sizeof(_time));
 		return 0;
 	}
 }

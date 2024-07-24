@@ -24,6 +24,7 @@ private:
 
 	String _readSerial();
 	void _clearSerial();
+	void _Delay(unsigned long ms);
 
 public:
 	SIM800L();

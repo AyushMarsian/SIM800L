@@ -7,7 +7,7 @@ String SIM800L::_readSerial()
 	_timeout = 0;
 	while (!_serial->available() && _timeout < (TIMEOUT * 100))
 	{
-		delay(10);
+		_Delay(10);
 		yield();
 		_timeout++;
 	}
@@ -27,6 +27,14 @@ void SIM800L::_clearSerial()
 	}
 }
 
+void SIM800L::_Delay(unsigned long ms)
+{
+	unsigned long startTime = millis();
+	while (millis() <= startTime + ms)
+	{
+	}
+}
+
 /////////////////////////////////////////////////INSTANT/INIT DEFINITION/////////////////////////////////////////////////
 
 SIM800L::SIM800L(void)
@@ -37,7 +45,7 @@ SIM800L::SIM800L(void)
 bool SIM800L::begin(Stream &serial) // begin Definition with Serial port assignment
 {
 	_serial = &serial;
-	delay(1000);
+	_Delay(1000);
 	yield();
 	_clearSerial();
 
@@ -83,15 +91,15 @@ bool SIM800L::startGPRS()
 {
 	_clearSerial();
 	_serial->print(F("AT+CIPSHUT\r\n"));
-	delay(200);
+	_Delay(200);
 	_serial->print(F("AT+CIPMUX=1\r\n"));
-	delay(200);
+	_Delay(200);
 	_serial->print(F("AT+CIPQSEND=1\r\n"));
-	delay(200);
+	_Delay(200);
 	_serial->print(F("AT+CIPRXGET=1\r\n"));
-	delay(200);
+	_Delay(200);
 	_serial->print(F("AT+CSTT=\"\"\r\n"));
-	delay(200);
+	_Delay(200);
 	_clearSerial();
 	_serial->println("AT+CIICR");
 	_serialBuffer = _readSerial();
@@ -180,7 +188,7 @@ void SIM800L::tcpSend(char *buffer)
 {
 	_clearSerial();
 	_serial->print("AT+CIPSEND=0\r\n");
-	delay(500);
+	_Delay(500);
 	_serial->print(buffer);
 	_clearSerial();
 	_serial->write(0x1A); // command for send data;
@@ -327,7 +335,7 @@ bool SIM800L::sendSMS(char *number, char *text)
 	_serial->print(text);
 	_serial->print("\r");
 
-	delay(100);
+	_Delay(100);
 	_clearSerial();
 	_serial->write(0x1A); // command for send sms
 
@@ -459,21 +467,21 @@ bool SIM800L::enAutoTimeZone()
 {
 	_clearSerial();
 	_serial->print(F("AT+CFUN=1\r\n"));
-	delay(2000);
+	_Delay(2000);
 	_clearSerial();
 	_serial->print(F("AT+COPS=2\r\n")); // DE REGISTER
-	delay(2000);
+	_Delay(2000);
 	_clearSerial();
 	_serial->print(F("AT+CLTS=1\r\n")); // AUTOMATIC TIME ZONE UPDATE ENABLE
-	delay(2000);
+	_Delay(2000);
 	_clearSerial();
 	_serial->print(F("AT+COPS=0\r\n")); // REGISTER NETWORK
-	delay(6000);
+	_Delay(6000);
 	_serialBuffer = _readSerial();
 	if ((_serialBuffer.indexOf("ERR")) != -1) // CHECK IF ERROR
 	{
 		softReset(); // SOFT-RESET GSM IF ERROR
-		delay(5000);
+		_Delay(5000);
 		return false;
 	}
 	else
@@ -494,7 +502,7 @@ bool SIM800L::hardReset()
 	if (rstDeclair)
 	{
 		digitalWrite(rstpin, HIGH);
-		delay(500);
+		_Delay(500);
 		digitalWrite(rstpin, LOW);
 
 		return 1;

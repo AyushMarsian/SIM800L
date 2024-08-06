@@ -297,7 +297,7 @@ bool SIM800L::hangoffCall()
 bool SIM800L::forwardCall(String &phoneNumber)
 {
 	_clearSerial();
-	String command = "AT+CCFC=0,3,\"" + phoneNumber + "\",145,1,1\r\n";
+	String command = "AT+CCFC=0,3,\"" + phoneNumber + "\",145\r\n";
 	_serial->print(F(command.c_str()));
 
 	if ((_serialBuffer.indexOf("OK")) != -1)

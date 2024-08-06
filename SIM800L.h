@@ -34,7 +34,8 @@ public:
 	bool dialNumber(char *number);
 	bool answerCall();
 	bool hangoffCall();
-	bool forwardCall(String phoneNumber);
+	bool forwardCall(String &phoneNumber);
+	bool stopForwading();
 	int8_t callStatus();
 	String incomingCall();
 	bool available();

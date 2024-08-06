@@ -80,7 +80,7 @@ bool SIM800L::begin(Stream &serial, uint8_t pin) // begin Definition with Serial
 	pinMode(rstpin, OUTPUT);
 	digitalWrite(rstpin, LOW);
 	rstDeclair = true;
-	begin(serial);
+	return begin(serial);
 }
 
 ////////////////////////////////////////////////////PUBLIC DEFINITION////////////////////////////////////////////////////
@@ -294,7 +294,7 @@ bool SIM800L::hangoffCall()
 	}
 }
 
-bool SIM800L::forwardCall(String phoneNumber)
+bool SIM800L::forwardCall(String &phoneNumber)
 {
 	_clearSerial();
 	String command = "AT+CCFC=0,3,\"" + phoneNumber + "\",145,1,1\r\n";
@@ -308,6 +308,25 @@ bool SIM800L::forwardCall(String phoneNumber)
 	{
 		return false;
 	}
+
+	return false;
+}
+
+bool SIM800L::stopForwading()
+{
+	_clearSerial();
+	_serial->print(F("AT+CCFC=0,0\r\n"));
+	_serialBuffer = _readSerial();
+	if ((_serialBuffer.indexOf("OK")) != -1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+	return false;
 }
 
 int8_t SIM800L::callStatus()

@@ -59,6 +59,8 @@ bool SIM800L::begin(Stream &serial) // begin Definition with Serial port assignm
 		_serialBuffer = _readSerial();
 		if ((_serialBuffer.indexOf("OK")) != -1)
 		{
+			_clearSerial();
+			_serial->print(F("AT+CLIP=1\r\n")); // ENABLE CALLER ID
 			return enAutoTimeZone();
 		}
 		else

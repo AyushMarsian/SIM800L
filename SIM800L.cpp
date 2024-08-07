@@ -249,11 +249,11 @@ String SIM800L::incomingCall()
 	}
 }
 
-bool SIM800L::dialNumber(char *number)
+bool SIM800L::dialNumber(String &phoneNumber)
 {
 	_clearSerial();
 	_serial->print(F("ATD"));
-	_serial->print(number);
+	_serial->print(phoneNumber.c_str());
 	_serial->print(F(";\r\n"));
 	_serialBuffer = _readSerial();
 	if ((_serialBuffer.indexOf("OK")) != -1)
@@ -299,8 +299,12 @@ bool SIM800L::hangoffCall()
 bool SIM800L::forwardCall(String &phoneNumber)
 {
 	_clearSerial();
-	String command = "AT+CCFC=0,3,\"" + phoneNumber + "\",145\r\n";
-	_serial->print(F(command.c_str()));
+
+	_serial->print(F("AT+CCFC=0,3,"));
+	_serial->print(phoneNumber.c_str());
+	_serial->print(F(",145\r\n"));
+
+	_serialBuffer = _readSerial();
 
 	if ((_serialBuffer.indexOf("OK")) != -1)
 	{
@@ -331,14 +335,105 @@ bool SIM800L::stopForwading()
 	return false;
 }
 
+bool SIM800L::startMPTY(String &originNumber, String &destinationNumber)
+{
+	_clearSerial();
+	_serial->print(F("AT+CHLD=2\r\n")); // hold the call
+	_serialBuffer = _readSerial();
+	if ((_serialBuffer.indexOf("OK")) != -1)
+	{
+	}
+	else
+	{
+		return false;
+	}
+
+	if (dialNumber(destinationNumber))
+	{
+	}
+	else
+	{
+		_clearSerial();
+		_serial->print(F("AT+CHLD=0\r\n"));
+		return false;
+	}
+
+	unsigned long startTime = millis();
+	while (callStatus(destinationNumber) != 0)
+	{
+		if (millis() - startTime > 30000)
+		{
+			_clearSerial();
+			_serial->print(F("AT+CHLD=0\r\n"));
+			return false;
+		}
+	}
+
+	if (callStatus(originNumber) == 1 && callStatus(destinationNumber) == 0)
+	{
+		_clearSerial();
+		_serial->print(F("AT+CHLD=3\r\n")); // release the held calls
+		_serialBuffer = _readSerial();
+
+		if ((_serialBuffer.indexOf("OK")) != -1)
+		{
+			return true;
+		}
+		else
+		{
+			_clearSerial();
+			_serial->print(F("AT+CHLD=0\r\n"));
+			return false;
+		}
+	}
+	else
+	{
+		_clearSerial();
+		_serial->print(F("AT+CHLD=0\r\n"));
+		return false;
+	}
+
+	_clearSerial();
+	_serial->print(F("AT+CHLD=0\r\n"));
+	return false;
+}
+
 int8_t SIM800L::callStatus()
 {
 	_clearSerial();
 	_serial->print(F("AT+CLCC\r\n"));
 	_serialBuffer = _readSerial();
+
 	if ((_serialBuffer.indexOf("+CLCC: ")) != -1)
 	{
 		return _serialBuffer.substring(_serialBuffer.indexOf("+CLCC: ") + 11, _serialBuffer.indexOf("+CLCC: ") + 13).toInt();
+	}
+	else if ((_serialBuffer.indexOf("OK")) != -1)
+	{
+		return -1;
+	}
+
+	return -1;
+}
+int8_t SIM800L::callStatus(String &phoneNumber)
+{
+	_clearSerial();
+	_serial->print(F("AT+CLCC\r\n"));
+	_serialBuffer = _readSerial();
+
+	// Template: +CLCC: 1,1,4,0,0,"+9XXXXXXXXXXX",145,""
+
+	if ((_serialBuffer.indexOf("+CLCC: ")) != -1)
+	{
+		if ((_serialBuffer.indexOf(phoneNumber)) != -1)
+		{
+
+			return _serialBuffer.substring(_serialBuffer.indexOf(phoneNumber) - 7, _serialBuffer.indexOf(phoneNumber) - 5).toInt();
+		}
+		else
+		{
+			return -1;
+		}
 	}
 	else if ((_serialBuffer.indexOf("OK")) != -1)
 	{

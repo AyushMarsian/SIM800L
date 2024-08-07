@@ -31,12 +31,14 @@ public:
 	bool begin(Stream &serial);
 	bool begin(Stream &serial, uint8_t pin);
 	// Methods for calling
-	bool dialNumber(char *number);
+	bool dialNumber(String &phoneNumber);
 	bool answerCall();
 	bool hangoffCall();
 	bool forwardCall(String &phoneNumber);
 	bool stopForwading();
+	bool startMPTY(String &originNumber, String &destinationNumber);
 	int8_t callStatus();
+	int8_t callStatus(String &phoneNumber);
 	String incomingCall();
 	bool available();
 

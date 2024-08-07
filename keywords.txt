@@ -17,6 +17,7 @@ dialNumber	KEYWORD2
 hangoffCall	KEYWORD2
 forwardCall KEYWORD2
 stopForwading KEYWORD2
+startMPTY KEYWORD2
 callStatus	KEYWORD2
 incomingCall	KEYWORD2
 available	KEYWORD2

@@ -335,7 +335,7 @@ bool SIM800L::stopForwading()
 	return false;
 }
 
-bool SIM800L::startMPTY(String &originNumber, String &destinationNumber)
+bool SIM800L::startMPTY(String &originNumber, String &destinationNumber, unsigned long callHoldTimeout)
 {
 	_clearSerial();
 	_serial->print(F("AT+CHLD=2\r\n")); // hold the call
@@ -361,7 +361,7 @@ bool SIM800L::startMPTY(String &originNumber, String &destinationNumber)
 	unsigned long startTime = millis();
 	while (callStatus(destinationNumber) != 0)
 	{
-		if (millis() - startTime > 30000)
+		if (millis() - startTime > callHoldTimeout)
 		{
 			_clearSerial();
 			_serial->print(F("AT+CHLD=0\r\n"));
@@ -372,7 +372,7 @@ bool SIM800L::startMPTY(String &originNumber, String &destinationNumber)
 	if (callStatus(originNumber) == 1 && callStatus(destinationNumber) == 0)
 	{
 		_clearSerial();
-		_serial->print(F("AT+CHLD=3\r\n")); // release the held calls
+		_serial->print(F("AT+CHLD=3\r\n"));
 		_serialBuffer = _readSerial();
 
 		if ((_serialBuffer.indexOf("OK")) != -1)

@@ -36,7 +36,7 @@ public:
 	bool hangoffCall();
 	bool forwardCall(String &phoneNumber);
 	bool stopForwading();
-	bool startMPTY(String &originNumber, String &destinationNumber);
+	bool startMPTY(String &originNumber, String &destinationNumber, unsigned long callHoldTimeout);
 	int8_t callStatus();
 	int8_t callStatus(String &phoneNumber);
 	String incomingCall();

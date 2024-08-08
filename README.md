@@ -39,7 +39,7 @@ answerCall()             |true or false|
 hangoffCall()            |true or false|
 forwardCall(phoneNumber) |true or false| Forward call to given phone number
 stopForwading()          |true or false| Cancel forwarding
-startMPTY(originNumber, destinationNumber) |true or false| Start MPTY with a destination number
+startMPTY(originNumber, destinationNumber, callHoldTimeout) |true or false| Start MPTY with a destination number, max hold time is callHoldTimeout
 callStatus()             |int8_t|Return the call status. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing, 4=In Progress, 5= Waiting, 6=Disconnected
 callStatus(phoneNumber)  |int8_t|Return the call status with given phone number. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing, 4=In Progress, 5= Waiting, 6=Disconnected
 sendSMS(number,text)     |true or false|parameters must be Strings

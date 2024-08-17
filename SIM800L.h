@@ -43,7 +43,7 @@ public:
 	bool available();
 
 	// Methods for sms
-	bool sendSMS(char *number, char *text);
+	bool sendSMS(String &number, String &text);
 	String readSMS(uint8_t msgIndex);
 
 	// Methods for network

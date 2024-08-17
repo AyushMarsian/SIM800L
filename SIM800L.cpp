@@ -443,16 +443,16 @@ int8_t SIM800L::callStatus(String &phoneNumber)
 	return -1;
 }
 
-bool SIM800L::sendSMS(char *number, char *text)
+bool SIM800L::sendSMS(String &number, String &text)
 {
 	uint32_t tempTime = 0;
 	_serial->print(F("AT+CMGF=1\r")); // set sms to text mode
 	_serialBuffer = _readSerial();
 	_serial->print(F("AT+CMGS=\"")); // command to prepare sms
-	_serial->print(number);
+	_serial->print(number.c_str());
 	_serial->print(F("\"\r"));
 	_serialBuffer = _readSerial();
-	_serial->print(text);
+	_serial->print(text.c_str());
 	_serial->print("\r");
 
 	_Delay(100);

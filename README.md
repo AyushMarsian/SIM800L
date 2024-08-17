@@ -43,7 +43,7 @@ startMPTY(originNumber, destinationNumber, callHoldTimeout) |true or false| Star
 callStatus()             |int8_t|Return the call status. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing, 4=In Progress, 5= Waiting, 6=Disconnected
 callStatus(phoneNumber)  |int8_t|Return the call status with given phone number. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing, 4=In Progress, 5= Waiting, 6=Disconnected
 sendSMS(number,text)     |true or false|parameters must be Strings
-sendSMS(msgIndex)        |String|
+readSMS(msgIndex)        |String|
 signalStrength()         |int8_t|Return signal strength, if -1 no network
 checkNetwork()           |true or false|
 serviceProvider()        |String|Return the name of service provider

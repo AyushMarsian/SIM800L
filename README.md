@@ -36,7 +36,7 @@ Name   |Return |  Notes
 begin(SerialPort)        |true or false|Initialize the library, Insert SIM card compulsorily
 begin(SerialPort,Rst_pin)|true or false|Initialize the library, Insert SIM card compulsorily. If you define and pass reset pin of your board you can reset GSM by external reset pin of the SIM800l
 dialNumber(number)       |true or false| It returns true if ATD passed successfully
-incomingCall()           |String| Returns caller phone number if available
+incomingCall(returnValue)           |void| Returns caller phone number if available
 answerCall()             |true or false|
 hangoffCall()            |true or false|
 forwardCall(phoneNumber) |true or false| Forward call to given phone number
@@ -45,11 +45,11 @@ startMPTY(originNumber, destinationNumber, callHoldTimeout) |true or false| Star
 callStatus()             |int8_t|Return the call status. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing, 4=In Progress, 5= Waiting, 6=Disconnected
 callStatus(phoneNumber)  |int8_t|Return the call status with given phone number. -1=Ideal, 0=Call in progress, 2=Dialing, 3=Ringing, 4=In Progress, 5= Waiting, 6=Disconnected
 sendSMS(number,text)     |true or false|
-readSMS(msgIndex)        |String|
+readSMS(msgIndex, returnValue)        |void|
 sendHEXsms(number,text) |true or false|
 signalStrength()         |int8_t|Return signal strength, if -1 no network
 checkNetwork()           |true or false|
-serviceProvider()        |String|Return the name of service provider
+serviceProvider(returnValue)        |void|Return the name of service provider
 GSMTime(time)            |true or false|Will fill up the array you passed. Where time[0]=year,time[1]=Month,time[2]=date,time[3]=hour,time[4]=minute,time[5]=seconds
 enAutoTimeZone()         |true or false|You have to enable Auto time zone before you read the time.
 softReset()              |true or false|Reset the module by AT commands

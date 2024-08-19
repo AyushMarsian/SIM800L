@@ -230,7 +230,7 @@ bool SIM800L::available()
 	}
 }
 
-String SIM800L::incomingCall()
+void SIM800L::incomingCall(SafeString &returnValue)
 {
 	/*Example buffer:
 	RING
@@ -241,11 +241,11 @@ String SIM800L::incomingCall()
 	{
 		int in1 = _serialBuffer.indexOf("+CLIP: \"") + String("+CLIP: \"").length();
 		int in2 = _serialBuffer.indexOf("\",", in1);
-		return (_serialBuffer.substring(in1, in2)).c_str();
+		returnValue = (_serialBuffer.substring(in1, in2)).c_str();
 	}
 	else
 	{
-		return "";
+		returnValue = "";
 	}
 }
 
@@ -483,7 +483,7 @@ bool SIM800L::sendSMS(const char *number, const char *text)
 	return false;
 }
 
-String SIM800L::readSMS(uint8_t msgIndex)
+void SIM800L::readSMS(uint8_t msgIndex, SafeString &returnValue)
 {
 	_serial->print(F("AT+CMGF=1\r")); // set sms to text mode
 	_serialBuffer = _readSerial();
@@ -495,15 +495,15 @@ String SIM800L::readSMS(uint8_t msgIndex)
 		_serialBuffer = _readSerial();
 		if (_serialBuffer.indexOf("CMGR:") != -1)
 		{
-			return _serialBuffer;
+			returnValue = _serialBuffer.c_str();
 		}
 		else
 		{
-			return "";
+			returnValue = "";
 		}
 	}
 
-	return "";
+	returnValue = "";
 }
 
 bool SIM800L::sendHEXsms(const char *number, const char *text)
@@ -582,7 +582,7 @@ bool SIM800L::checkNetwork()
 	}
 }
 
-String SIM800L::serviceProvider()
+void SIM800L::serviceProvider(SafeString &returnValue)
 {
 	if (checkNetwork())
 	{
@@ -593,17 +593,19 @@ String SIM800L::serviceProvider()
 		{
 			uint8_t index1 = _serialBuffer.indexOf("\"");
 			uint8_t index2 = _serialBuffer.indexOf("\"", index1 + 1);
-			return (_serialBuffer.substring(index1 + 1, index2)).c_str();
+			returnValue = (_serialBuffer.substring(index1 + 1, index2)).c_str();
 		}
 		else
 		{
-			return "No network";
+			returnValue = "No network";
 		}
 	}
 	else
 	{
-		return "No network";
+		returnValue = "No network";
 	}
+
+	returnValue = "No network";
 }
 
 bool SIM800L::GSMTime(uint8_t *_time)

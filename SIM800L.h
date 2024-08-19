@@ -2,6 +2,7 @@
 #define SIM800L_h
 #define __SIM800L_VERSION__ 1.0
 #include "Arduino.h"
+#include "SafeString.h"
 
 #ifndef ESP32
 #include <WiFi.h>
@@ -39,18 +40,18 @@ public:
 	bool startMPTY(const char *originNumber, const char *destinationNumber, unsigned long callHoldTimeout);
 	int8_t callStatus();
 	int8_t callStatus(const char *phoneNumber);
-	String incomingCall();
+	void incomingCall(SafeString &returnValue);
 	bool available();
 
 	// Methods for sms
 	bool sendSMS(const char *number, const char *text);
-	String readSMS(uint8_t msgIndex);
+	void readSMS(uint8_t msgIndex, SafeString &returnValue);
 	bool sendHEXsms(const char *number, const char *text);
 
 	// Methods for network
 	int8_t signalStrength();
 	bool checkNetwork();
-	String serviceProvider();
+	void serviceProvider(SafeString &returnValue);
 	bool GSMTime(uint8_t *_time);
 	bool enAutoTimeZone();
 

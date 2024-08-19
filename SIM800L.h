@@ -31,20 +31,21 @@ public:
 	bool begin(Stream &serial);
 	bool begin(Stream &serial, uint8_t pin);
 	// Methods for calling
-	bool dialNumber(String &phoneNumber);
+	bool dialNumber(const char *phoneNumber);
 	bool answerCall();
 	bool hangoffCall();
-	bool forwardCall(String &phoneNumber);
+	bool forwardCall(const char *phoneNumber);
 	bool stopForwading();
-	bool startMPTY(String &originNumber, String &destinationNumber, unsigned long callHoldTimeout);
+	bool startMPTY(const char *originNumber, const char *destinationNumber, unsigned long callHoldTimeout);
 	int8_t callStatus();
-	int8_t callStatus(String &phoneNumber);
+	int8_t callStatus(const char *phoneNumber);
 	String incomingCall();
 	bool available();
 
 	// Methods for sms
-	bool sendSMS(String &number, String &text);
+	bool sendSMS(const char *number, const char *text);
 	String readSMS(uint8_t msgIndex);
+	bool sendHEXsms(const char *number, const char *text);
 
 	// Methods for network
 	int8_t signalStrength();

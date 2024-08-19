@@ -241,7 +241,7 @@ String SIM800L::incomingCall()
 	{
 		int in1 = _serialBuffer.indexOf("+CLIP: \"") + String("+CLIP: \"").length();
 		int in2 = _serialBuffer.indexOf("\",", in1);
-		return _serialBuffer.substring(in1, in2);
+		return (_serialBuffer.substring(in1, in2)).c_str();
 	}
 	else
 	{
@@ -249,11 +249,11 @@ String SIM800L::incomingCall()
 	}
 }
 
-bool SIM800L::dialNumber(String &phoneNumber)
+bool SIM800L::dialNumber(const char *phoneNumber)
 {
 	_clearSerial();
 	_serial->print(F("ATD"));
-	_serial->print(phoneNumber.c_str());
+	_serial->print(phoneNumber);
 	_serial->print(F(";\r\n"));
 	_serialBuffer = _readSerial();
 	if ((_serialBuffer.indexOf("OK")) != -1)
@@ -296,12 +296,12 @@ bool SIM800L::hangoffCall()
 	}
 }
 
-bool SIM800L::forwardCall(String &phoneNumber)
+bool SIM800L::forwardCall(const char *phoneNumber)
 {
 	_clearSerial();
 
 	_serial->print(F("AT+CCFC=0,3,"));
-	_serial->print(phoneNumber.c_str());
+	_serial->print(phoneNumber);
 	_serial->print(F(",145\r\n"));
 
 	_serialBuffer = _readSerial();
@@ -335,7 +335,7 @@ bool SIM800L::stopForwading()
 	return false;
 }
 
-bool SIM800L::startMPTY(String &originNumber, String &destinationNumber, unsigned long callHoldTimeout)
+bool SIM800L::startMPTY(const char *originNumber, const char *destinationNumber, unsigned long callHoldTimeout)
 {
 	_clearSerial();
 	_serial->print(F("AT+CHLD=2\r\n")); // hold the call
@@ -415,7 +415,7 @@ int8_t SIM800L::callStatus()
 
 	return -1;
 }
-int8_t SIM800L::callStatus(String &phoneNumber)
+int8_t SIM800L::callStatus(const char *phoneNumber)
 {
 	_clearSerial();
 	_serial->print(F("AT+CLCC\r\n"));
@@ -443,23 +443,31 @@ int8_t SIM800L::callStatus(String &phoneNumber)
 	return -1;
 }
 
-bool SIM800L::sendSMS(String &number, String &text)
+bool SIM800L::sendSMS(const char *number, const char *text)
 {
-	uint32_t tempTime = 0;
 	_serial->print(F("AT+CMGF=1\r")); // set sms to text mode
 	_serialBuffer = _readSerial();
-	_serial->print(F("AT+CMGS=\"")); // command to prepare sms
-	_serial->print(number.c_str());
-	_serial->print(F("\"\r"));
+	_serial->print(F("AT+CMGS=\"")); // command to prepare smss
+	_serial->print(F(number));
+
+	if (number[0] == '+')
+	{
+		_serial->print(F("\",145\r"));
+	}
+	else
+	{
+		_serial->print(F("\",129\r"));
+	}
+
 	_serialBuffer = _readSerial();
-	_serial->print(text.c_str());
-	_serial->print("\r");
+	_serial->print(text);
+	_serial->print(F("\r"));
 
 	_Delay(100);
 	_clearSerial();
 	_serial->write(0x1A); // command for send sms
 
-	tempTime = millis();
+	uint32_t tempTime = millis();
 	while (millis() - tempTime <= 20000) // Wait for SMS sent response for 1 minute(Maximum response time of AT+CMGS is 1 min)
 	{
 		if (available())
@@ -483,7 +491,7 @@ String SIM800L::readSMS(uint8_t msgIndex)
 	{
 		_serial->print(F("AT+CMGR="));
 		_serial->print(msgIndex);
-		_serial->print("\r");
+		_serial->print(F("\r"));
 		_serialBuffer = _readSerial();
 		if (_serialBuffer.indexOf("CMGR:") != -1)
 		{
@@ -496,6 +504,45 @@ String SIM800L::readSMS(uint8_t msgIndex)
 	}
 
 	return "";
+}
+
+bool SIM800L::sendHEXsms(const char *number, const char *text)
+{
+	_serial->print(F("ATZ\r\n"));
+	_serialBuffer = _readSerial();
+	_serial->print(F("AT+CSCS=\"HEX\"\r\n"));
+	_serialBuffer = _readSerial();
+	_serial->print(F("AT+CSMP=17,168,0,8\r\n"));
+	_serialBuffer = _readSerial();
+	_serial->print(F("AT+CMGF=1\r\n"));
+	_serialBuffer = _readSerial();
+
+	_serial->print(F("AT+CMGS=\""));
+	_serial->print(number);
+	_serial->print(F("\"\r\n"));
+
+	_serialBuffer = _readSerial();
+	_serial->print(text);
+	_serial->print(F("\r"));
+
+	_Delay(100);
+	_clearSerial();
+	_serial->write(0x1A);
+
+	uint32_t tempTime = millis();
+	while (millis() - tempTime <= 20000)
+	{
+		if (available())
+		{
+			_serialBuffer = _readSerial();
+			if (((_serialBuffer.indexOf("+CMGS")) != -1))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 int8_t SIM800L::signalStrength()
@@ -546,7 +593,7 @@ String SIM800L::serviceProvider()
 		{
 			uint8_t index1 = _serialBuffer.indexOf("\"");
 			uint8_t index2 = _serialBuffer.indexOf("\"", index1 + 1);
-			return _serialBuffer.substring(index1 + 1, index2);
+			return (_serialBuffer.substring(index1 + 1, index2)).c_str();
 		}
 		else
 		{

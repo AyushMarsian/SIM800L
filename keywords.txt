@@ -28,6 +28,7 @@ available	KEYWORD2
 
 sendSMS	KEYWORD2
 readSMS	KEYWORD2
+sendHEXsms KEYWORD2
 
 #######################################
 # Methods for Network (KEYWORD2)

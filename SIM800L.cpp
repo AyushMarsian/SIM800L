@@ -445,28 +445,22 @@ int8_t SIM800L::callStatus(const char *phoneNumber)
 
 bool SIM800L::sendSMS(const char *number, const char *text)
 {
-	_serial->print(F("AT+CMGF=1\r")); // set sms to text mode
+	_clearSerial();
+	_serial->print(F("ATZ\r\n"));
+	_serialBuffer = _readSerial();
+	_serial->print(F("AT+CMGF=1\r\n")); // set sms to text mode
+	_serialBuffer = _readSerial();
+	_serial->print(F("AT+CSCS=\"IRA\"\r\n"));
 	_serialBuffer = _readSerial();
 	_serial->print(F("AT+CMGS=\"")); // command to prepare smss
-	_serial->print(F(number));
-
-	if (number[0] == '+')
-	{
-		_serial->print(F("\",145\r"));
-	}
-	else
-	{
-		_serial->print(F("\",129\r"));
-	}
-
+	_serial->print(number);
+	_serial->print(F("\", 145\r"));
 	_serialBuffer = _readSerial();
 	_serial->print(text);
 	_serial->print(F("\r"));
-
-	_Delay(100);
-	_clearSerial();
 	_serial->write(0x1A); // command for send sms
 
+	_clearSerial();
 	uint32_t tempTime = millis();
 	while (millis() - tempTime <= 20000) // Wait for SMS sent response for 1 minute(Maximum response time of AT+CMGS is 1 min)
 	{
@@ -485,6 +479,7 @@ bool SIM800L::sendSMS(const char *number, const char *text)
 
 void SIM800L::readSMS(uint8_t msgIndex, SafeString &returnValue)
 {
+	_clearSerial();
 	_serial->print(F("AT+CMGF=1\r")); // set sms to text mode
 	_serialBuffer = _readSerial();
 	if ((_serialBuffer.indexOf("ERR")) != -1) // CHECK IF ERROR
@@ -508,6 +503,7 @@ void SIM800L::readSMS(uint8_t msgIndex, SafeString &returnValue)
 
 bool SIM800L::sendHEXsms(const char *number, const char *text)
 {
+	_clearSerial();
 	_serial->print(F("ATZ\r\n"));
 	_serialBuffer = _readSerial();
 	_serial->print(F("AT+CSCS=\"HEX\"\r\n"));
@@ -520,15 +516,13 @@ bool SIM800L::sendHEXsms(const char *number, const char *text)
 	_serial->print(F("AT+CMGS=\""));
 	_serial->print(number);
 	_serial->print(F("\"\r\n"));
-
 	_serialBuffer = _readSerial();
 	_serial->print(text);
 	_serial->print(F("\r"));
-
-	_Delay(100);
-	_clearSerial();
+	_serialBuffer = _readSerial();
 	_serial->write(0x1A);
 
+	_clearSerial();
 	uint32_t tempTime = millis();
 	while (millis() - tempTime <= 20000)
 	{

@@ -3,6 +3,7 @@
 #define __SIM800L_VERSION__ 1.0
 #include "Arduino.h"
 #include "SafeString.h"
+#include "SafeStringReader.h"
 
 #ifndef ESP32
 #include <WiFi.h>
@@ -17,13 +18,15 @@ class SIM800L
 private:
 	int _timeout;
 	Stream *_serial;
-	String _serialBuffer = "";
+	char _charBuffer[1024] = {0};
 	uint8_t rstpin = 0;	 // GSM HARD RESET PIN
 	bool rstDeclair = 0; // CONFIG BIT
 	// void (*tcp_callback)(const char* _data, const uint16_t len) = NULL;
 	// char* apn,user,password;
 
-	String _readSerial();
+	
+
+	String _readSerial(); // SafeString &returnBuffer);
 	void _clearSerial();
 	void _Delay(unsigned long ms);
 
@@ -40,18 +43,18 @@ public:
 	bool startMPTY(const char *originNumber, const char *destinationNumber, unsigned long callHoldTimeout);
 	int8_t callStatus();
 	int8_t callStatus(const char *phoneNumber);
-	void incomingCall(SafeString &returnValue);
+	void incomingCall(SafeString &returnSFstr);
 	bool available();
 
 	// Methods for sms
 	bool sendSMS(const char *number, const char *text);
-	void readSMS(uint8_t msgIndex, SafeString &returnValue);
+	void readSMS(uint8_t msgIndex, SafeString &returnSFstr);
 	bool sendHEXsms(const char *number, const char *text);
 
 	// Methods for network
 	int8_t signalStrength();
 	bool checkNetwork();
-	void serviceProvider(SafeString &returnValue);
+	void serviceProvider(SafeString &returnSFstr);
 	bool GSMTime(uint8_t *_time);
 	bool enAutoTimeZone();
 

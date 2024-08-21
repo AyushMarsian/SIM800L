@@ -2,18 +2,8 @@
 
 ////////////////////////////////////////////////////PRIVATE DEFINITION////////////////////////////////////////////////////
 
-String SIM800L::_readSerial() // SafeString &returnBuffer)
+String SIM800L::_readSerial()
 {
-	// createSafeStringReader(_sfReader, 1024, "\r\n");
-	// _sfReader.connect(_serial);
-	// _sfReader.setTimeout(TIMEOUT * 1000);
-	// returnBuffer.clear();
-	// if (_sfReader.read())
-	// {
-	// 	_sfReader.trim();
-	// 	returnBuffer = _sfReader;
-	// }
-
 	_timeout = 0;
 	while (!_serial->available() && _timeout < (TIMEOUT * 100))
 	{
@@ -25,6 +15,7 @@ String SIM800L::_readSerial() // SafeString &returnBuffer)
 	{
 		return _serial->readString();
 	}
+	return "";
 }
 
 void SIM800L::_clearSerial()
@@ -33,7 +24,6 @@ void SIM800L::_clearSerial()
 	{
 		_serial->readString();
 	}
-	//_sfReader.flush();
 }
 
 void SIM800L::_Delay(unsigned long ms)
@@ -757,8 +747,6 @@ bool SIM800L::enAutoTimeZone()
 	_serialBuffer = _readSerial().c_str();
 	if ((_serialBuffer.indexOf("ERR")) != -1) // CHECK IF ERROR
 	{
-		softReset(); // SOFT-RESET GSM IF ERROR
-		_Delay(5000);
 		return false;
 	}
 	else

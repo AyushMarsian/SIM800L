@@ -24,9 +24,7 @@ private:
 	// void (*tcp_callback)(const char* _data, const uint16_t len) = NULL;
 	// char* apn,user,password;
 
-	
-
-	String _readSerial(); // SafeString &returnBuffer);
+	String _readSerial();
 	void _clearSerial();
 	void _Delay(unsigned long ms);
 
